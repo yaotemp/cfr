@@ -47,6 +47,119 @@ The decompilation tests are also performed by the GitHub workflow, and in case o
 
 The test class is [`org.benf.cfr.test.DecompilationTest`](decompilation-test/src/org/benf/cfr/test/DecompilationTest.java). It can be modified to adjust the test directories, or to ignore certain class files or JARs. Additionally it is possible to directly execute the tests there from the IDE. This usually gives better output than what is shown by Maven, and allows using the built-in IDE functionality for showing differences between the expected and the actual data.
 
+## Quick Start Example
+
+An example HelloWorld class is included to demonstrate CFR's capabilities. Here's how to use it:
+
+### 1. Compile the Example
+
+The example is located in `examples/org/benf/cfr/examples/HelloWorld.java`. If you want to compile it yourself:
+
+```bash
+javac examples/org/benf/cfr/examples/HelloWorld.java
+```
+
+This will create the class files in the same directory.
+
+### 2. Decompile Using CFR
+
+After building CFR with Maven, you can decompile the example:
+
+```bash
+java -jar target/cfr-0.153-SNAPSHOT.jar examples/org/benf/cfr/examples/HelloWorld.class
+```
+
+You should see decompiled output like:
+
+```java
+/*
+ * Decompiled with CFR 0.153-SNAPSHOT.
+ */
+package org.benf.cfr.examples;
+
+public class HelloWorld {
+    private static final String MESSAGE = "Hello, World!";
+
+    public static void main(String[] stringArray) {
+        System.out.println(MESSAGE);
+        for (int i = 0; i < 3; ++i) {
+            HelloWorld.printNumber(i);
+        }
+        Runnable runnable = () -> System.out.println("This is a lambda expression");
+        runnable.run();
+        try (AutoCloseable autoCloseable = new AutoCloseable(){
+
+            @Override
+            public void close() throws Exception {
+                System.out.println("Resource closed");
+            }
+        };){
+            System.out.println("Using a resource in try-with-resources");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private static void printNumber(int n) {
+        switch (n) {
+            case 0: {
+                System.out.println("Zero");
+                break;
+            }
+            case 1: {
+                System.out.println("One");
+                break;
+            }
+            default: {
+                System.out.println("Number: " + n);
+            }
+        }
+    }
+}
+```
+
+### 3. Try Different CFR Options
+
+CFR provides many options to customize decompilation. For example, to hide empty constructors:
+
+```bash
+java -jar target/cfr-0.153-SNAPSHOT.jar examples/org/benf/cfr/examples/HelloWorld.class --hideemptysuperconstructors true
+```
+
+For all available options, use:
+
+```bash
+java -jar target/cfr-0.153-SNAPSHOT.jar --help
+```
+
+### 4. Running the Example
+
+You can also run the example to see it in action:
+
+```bash
+java -cp examples org.benf.cfr.examples.HelloWorld
+```
+
+Expected output:
+```
+Hello, World!
+Zero
+One
+Number: 2
+This is a lambda expression
+Using a resource in try-with-resources
+Resource closed
+```
+
+### 5. Using Example Scripts
+
+For convenience, example scripts are provided to demonstrate compiling, running, and decompiling the HelloWorld example:
+
+- Windows: `run_example.bat`
+- Unix/Linux/macOS: `run_example.sh` (make it executable with `chmod +x run_example.sh`)
+
+Simply run the appropriate script for your platform after building CFR with Maven.
+
 ### Options file
 
 The decompilation process can be customized by adding an options file. Each line of it specifies a CFR option, with key and value separated by a space. Empty lines and lines starting with `#` are ignored and can be used for comments.

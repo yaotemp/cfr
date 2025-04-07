@@ -53,24 +53,28 @@
     </scm>
 
     <dependencies>
+        <!-- Remove JUnit dependency -->
+        <!--
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- For decompilation test result diff -->
+        -->
+        <!-- Remove diff utility dependency -->
+        <!--
         <dependency>
             <groupId>io.github.java-diff-utils</groupId>
             <artifactId>java-diff-utils</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        -->
     </dependencies>
 
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>decompilation-test/src</testSourceDirectory>
         <plugins>
             <!-- For getting Git revision information -->
             <plugin>
@@ -117,11 +121,6 @@
                     <testTarget>8</testTarget>
                     <compilerArgument>-Xlint:none</compilerArgument>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -174,6 +173,9 @@
                     </subpackages>
                     <doclint>none</doclint>
                     <sourcefileincludes>**\/api\/*.java</sourcefileincludes>
+                    <detectJavaApiLink>false</detectJavaApiLink>
+                    <detectLinks>false</detectLinks>
+                    <detectOfflineLinks>false</detectOfflineLinks>
                 </configuration>
             </plugin>
             <plugin>
@@ -196,7 +198,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <javaVersion>1.6</javaVersion>
+        <javaVersion>1.8</javaVersion>
         <!-- These are also used by javadoc plugin, see MJAVADOC-562 -->
         <maven.compiler.source>${javaVersion}</maven.compiler.source>
         <maven.compiler.target>${javaVersion}</maven.compiler.target>
